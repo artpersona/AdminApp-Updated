@@ -20,104 +20,101 @@ const AuthProvider = ({children}) => {
 
   const adminAuth = (email, password) => {
     return new Promise((resolve, reject) => {
-      auth
+      auth()
         .signInWithEmailAndPassword(email, password)
         .then(async res => {
-          getAdminProfile()
-            .then(() => {
-              resolve('Success');
-            })
-            .catch(error => reject(error));
+          console.log('res is: ', res);
+          resolve('success!');
+          // getAdminProfile()
+          //   .then(() => {
+          //     resolve('Success');
+          //   })
+          //   .catch(error => reject(error));
         })
         .catch(error => reject(error));
     });
   };
 
-  const getAdminProfile = () => {
-    return new Promise((resolve, reject) => {
-      auth.onAuthStateChanged(user => {
-        if (user) {
-          user
-            .getIdToken()
-            .then(function (idToken) {
-              Storage.save('token', idToken);
-              setToken(idToken);
-            })
-            .catch(err => {
-              reject();
-              Alert.alert('Sorry something went wrong', err.message);
-            });
+  const getAdminProfile = user => {
+    if (user) {
+      user
+        .getIdToken()
+        .then(function (idToken) {
+          Storage.save('token', idToken);
+          setToken(idToken);
+        })
+        .catch(err => {
+          reject();
+          Alert.alert('Sorry something went wrong', err.message);
+        });
 
-          const userRef = database().ref('user');
-          userRef
-            .orderByChild('email')
-            .equalTo(user.email)
-            .on('value', snapshot => {
-              const userObject = (snapshot && snapshot.val()) || {};
+      const userRef = database().ref('user');
+      userRef
+        .orderByChild('email')
+        .equalTo(user.email)
+        .on('value', snapshot => {
+          const userObject = (snapshot && snapshot.val()) || {};
 
-              // registerForPushNotificationsAsync(Object.keys(userObject)[0]);
+          // registerForPushNotificationsAsync(Object.keys(userObject)[0]);
 
-              const userRole =
-                (userObject &&
-                  Object.entries(userObject) &&
-                  Object.entries(userObject).length &&
-                  Object.entries(userObject).map(item => {
-                    item[1].key = item[0];
-                    return item[1]['role'];
-                  })) ||
-                [];
+          const userRole =
+            (userObject &&
+              Object.entries(userObject) &&
+              Object.entries(userObject).length &&
+              Object.entries(userObject).map(item => {
+                item[1].key = item[0];
+                return item[1]['role'];
+              })) ||
+            [];
 
-              const userName =
-                (userObject &&
-                  Object.entries(userObject) &&
-                  Object.entries(userObject).length &&
-                  Object.entries(userObject).map(item => {
-                    item[1].key = item[0];
-                    return item[1]['name'];
-                  })) ||
-                [];
+          const userName =
+            (userObject &&
+              Object.entries(userObject) &&
+              Object.entries(userObject).length &&
+              Object.entries(userObject).map(item => {
+                item[1].key = item[0];
+                return item[1]['name'];
+              })) ||
+            [];
 
-              const userStore =
-                (userObject &&
-                  Object.entries(userObject) &&
-                  Object.entries(userObject).length &&
-                  Object.entries(userObject).map(item => {
-                    item[1].key = item[0];
-                    return item[1]['store_id'];
-                  })) ||
-                [];
+          const userStore =
+            (userObject &&
+              Object.entries(userObject) &&
+              Object.entries(userObject).length &&
+              Object.entries(userObject).map(item => {
+                item[1].key = item[0];
+                return item[1]['store_id'];
+              })) ||
+            [];
 
-              const _userBranch =
-                (userObject &&
-                  Object.entries(userObject) &&
-                  Object.entries(userObject).length &&
-                  Object.entries(userObject).map(item => {
-                    item[1].key = item[0];
-                    return item[1]['branch_key'];
-                  })) ||
-                [];
+          const _userBranch =
+            (userObject &&
+              Object.entries(userObject) &&
+              Object.entries(userObject).length &&
+              Object.entries(userObject).map(item => {
+                item[1].key = item[0];
+                return item[1]['branch_key'];
+              })) ||
+            [];
 
-              const adminProfile = {
-                photoURL: user.photoURL,
-                displayName: userName[0],
-                email: user.email,
-                uid: user.uid,
-                role: userRole,
-              };
+          const adminProfile = {
+            photoURL: user.photoURL,
+            displayName: userName[0],
+            email: user.email,
+            uid: user.uid,
+            role: userRole,
+          };
 
-              setUserBranch(_userBranch);
-              setUserInfoStore(userStore);
-              setUserInfoRole(userRole);
+          setUserBranch(_userBranch);
+          setUserInfoStore(userStore);
+          setUserInfoRole(userRole);
 
-              Storage.save('role', userRole);
-              Storage.save('store_id', userStore);
-              Storage.save('profile', adminProfile);
-              setLoggedUser(adminProfile);
-              resolve();
-            });
-        }
-      });
-    });
+          Storage.save('role', userRole);
+          Storage.save('store_id', userStore);
+          Storage.save('profile', adminProfile);
+          setLoggedUser(adminProfile);
+        });
+    }
   };
 
   const fetchBranchDetails = async () => {
@@ -142,6 +139,10 @@ const AuthProvider = ({children}) => {
       setToken(getToken);
     }
   };
+
+  useEffect(() => {
+    auth().onAuthStateChanged(user => getAdminProfile(user));
+  }, []);
 
   // const registerForPushNotificationsAsync = async user => {
   //   let token;

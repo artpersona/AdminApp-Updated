@@ -22,7 +22,7 @@ function CustomHeaderButton(props) {
             marginLeft: 10,
             marginTop: 25,
           }}>
-          <Button
+          <TouchableOpacity
             transparent
             activeOpacity={0.5}
             onPress={() => {
@@ -34,7 +34,7 @@ function CustomHeaderButton(props) {
               color={Colors.darkGray}
               style={{marginLeft: 30, margin: 30}}
             />
-          </Button>
+          </TouchableOpacity>
         </View>
       )}
 

@@ -73,4 +73,8 @@ export default StyleSheet.create({
     marginBottom: 3,
     top: 9,
   },
+
+  placeholder__text: {
+    fontSize: RFValue(11),
+  },
 });

@@ -268,7 +268,8 @@ function OrderItems({order}) {
                       ]
                 }
                 disabled={timeDifference < 5}
-                onPress={handleVisibility2}>
+                // onPress={handleVisibility2}
+              >
                 <Icon2 name="chain" size={20} color={'white'} />
               </TouchableOpacity>
 
@@ -346,7 +347,7 @@ function OrderItems({order}) {
           </View>
         </TouchableOpacity>
 
-        <Modal
+        {/* <Modal
           isVisible={logsVisible}
           animationIn="slideInUp"
           animationOut="slideOutDown"
@@ -372,9 +373,9 @@ function OrderItems({order}) {
               </View>
             </ScrollView>
           </View>
-        </Modal>
+        </Modal> */}
 
-        <Modal
+        {/* <Modal
           isVisible={isVisible2}
           animationIn="slideInUp"
           animationOut="slideOutDown"
@@ -419,9 +420,9 @@ function OrderItems({order}) {
               </View>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
 
-        <Modal
+        {/* <Modal
           isVisible={isVisible}
           animationIn="slideInUp"
           animationOut="slideOutDown"
@@ -473,7 +474,7 @@ function OrderItems({order}) {
               </View>
             </View>
           </View>
-        </Modal>
+        </Modal> */}
 
         {/* Alert For Acknowledging Order */}
         <AwesomeAlert

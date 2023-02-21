@@ -49,7 +49,7 @@ function CustomDrawerContent(props) {
     <LinearGradient colors={['#FEC636', '#FEC636']} style={{flex: 1}}>
       <View style={styles.iconContainer}>
         <View style={styles.buttonContainer}>
-          <Button
+          <TouchableOpacity
             transparent
             activeOpacity={0.5}
             onPress={() => navigation.closeDrawer()}>
@@ -59,7 +59,7 @@ function CustomDrawerContent(props) {
               color="#FFF"
               style={(styles.closeIcon, style)}
             />
-          </Button>
+          </TouchableOpacity>
         </View>
       </View>
 

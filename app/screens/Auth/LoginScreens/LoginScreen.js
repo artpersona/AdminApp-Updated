@@ -45,11 +45,13 @@ function LoginScreen() {
   };
 
   const adminLogin = ({email, password}) => {
+    console.log('data is: ', email);
     setIsLoggingIn(true);
     adminAuth(email, password)
-      .then(res => {})
+      .then(res => {
+        alert('success!');
+      })
       .catch(error => {
-        Alert.alert('Sorry something wrong', error.message);
         setIsLoggingIn(false);
         const errorMessage = error.message;
 
