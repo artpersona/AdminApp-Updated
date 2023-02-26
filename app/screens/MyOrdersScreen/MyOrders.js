@@ -1,22 +1,22 @@
-import React, { useContext, useEffect, useState } from "react";
-import { View, SectionList } from "react-native";
-import CustomHeader from "../../components/CustomHeader/CustomHeader";
-import _ from "lodash";
-import OrdersList from "../../components/ActiveOrders/OrdersLists";
-import PendingList from "../../components/PendingOrders/PendingList";
-import { OrderContext } from "../../shared/contexts/OrderContext";
-import NetInfo from "@react-native-community/netinfo";
-import ModalView from "../../components/ModalView/ModalView";
+import React, {useContext, useEffect, useState} from 'react';
+import {View, SectionList} from 'react-native';
+import CustomHeader from '../../components/CustomHeader/CustomHeader';
+import _ from 'lodash';
+import OrdersList from '../../components/ActiveOrders/OrdersLists';
+import PendingList from '../../components/PendingOrders/PendingList';
+import {OrderContext} from '../../shared/contexts/OrderContext';
+import NetInfo from '@react-native-community/netinfo';
+import ModalView from '../../components/ModalView/ModalView';
 
-import styles from "./styles";
-function MyOrders({ navigation }) {
-  const { newOrders, pendingOrders } = useContext(OrderContext);
+import styles from './styles';
+function MyOrders({navigation}) {
+  const {newOrders, pendingOrders} = useContext(OrderContext);
   const [noNetModal, setNoNetModal] = useState(false);
 
-  const keyExtract = (index) => index.toString();
+  const keyExtract = index => index.toString();
 
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
+    const unsubscribe = NetInfo.addEventListener(state => {
       if (!state.isConnected) {
         setNoNetModal(true);
       }
@@ -27,8 +27,8 @@ function MyOrders({ navigation }) {
     };
   }, []);
 
-  const renderItem = ({ item, section }) => {
-    if (section.type == "row") {
+  const renderItem = ({item, section}) => {
+    if (section.type == 'row') {
       return (
         <View style={styles.newOrders__section}>
           <OrdersList newOrders={newOrders} />
@@ -47,7 +47,7 @@ function MyOrders({ navigation }) {
     setNoNetModal(false);
 
     // To get the network state once
-    NetInfo.fetch().then((state) => {
+    NetInfo.fetch().then(state => {
       if (!state.isConnected) {
         setNoNetModal(true);
       } else {
@@ -60,12 +60,12 @@ function MyOrders({ navigation }) {
   return (
     <>
       <CustomHeader />
-      <View style={{ flex: 1, backgroundColor: "white", height: "100%" }}>
+      <View style={{flex: 1, backgroundColor: 'white', height: '100%'}}>
         <View style={styles.container}>
           <SectionList
             sections={[
-              { type: "row", data: [newOrders] },
-              { type: "column", data: [pendingOrders] },
+              {type: 'row', data: [newOrders]},
+              {type: 'column', data: [pendingOrders]},
             ]}
             renderItem={renderItem}
             keyExtractor={keyExtract}

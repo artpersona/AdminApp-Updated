@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {FirebaseContext} from './FirebaseContext';
 
 import {Alert} from 'react-native';
-import {Storage} from '../../utils';
+import Storage from '../../utils/files/Storage';
 
 export const AuthContext = createContext();
 const AuthProvider = ({children}) => {
@@ -25,11 +25,6 @@ const AuthProvider = ({children}) => {
         .then(async res => {
           console.log('res is: ', res);
           resolve('success!');
-          // getAdminProfile()
-          //   .then(() => {
-          //     resolve('Success');
-          //   })
-          //   .catch(error => reject(error));
         })
         .catch(error => reject(error));
     });

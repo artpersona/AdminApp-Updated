@@ -1,5 +1,4 @@
-import { AsyncStorage } from "react-native";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 class PersistingStorage {
   // save = async (key, value) => {
   //   try {
@@ -13,7 +12,7 @@ class PersistingStorage {
     try {
       if (key && value) {
         let data = value;
-        if (typeof data == "object") {
+        if (typeof data == 'object') {
           data = JSON.stringify(value);
         }
         await AsyncStorage.setItem(key.toString(), data.toString());
@@ -45,12 +44,12 @@ class PersistingStorage {
   //   }
   // };
 
-  get = async (key) => {
+  get = async key => {
     try {
       let rawData = await AsyncStorage.getItem(key);
       if (rawData) {
         let parsedData = JSON.parse(rawData);
-        if (typeof parsedData === "object") {
+        if (typeof parsedData === 'object') {
           return parsedData;
         }
         return rawData;
@@ -77,7 +76,7 @@ class PersistingStorage {
 
   getProfile = async () => {
     try {
-      let data = await AsyncStorage.getItem("profile");
+      let data = await AsyncStorage.getItem('profile');
       if (data) {
         return JSON.parse(data);
       }
@@ -88,7 +87,7 @@ class PersistingStorage {
 
   getToken = async () => {
     try {
-      let data = await AsyncStorage.getItem("token");
+      let data = await AsyncStorage.getItem('token');
       if (data) {
         return data;
       }
@@ -97,7 +96,7 @@ class PersistingStorage {
     }
   };
 
-  removeItem = async (key) => {
+  removeItem = async key => {
     try {
       await AsyncStorage.removeItem(key);
       return true;
@@ -108,7 +107,7 @@ class PersistingStorage {
 
   removeUserData = async () => {
     try {
-      const keys = ["profile", "token"];
+      const keys = ['profile', 'token'];
       await AsyncStorage.multiRemove(keys);
     } catch (e) {
       console.warn(e);

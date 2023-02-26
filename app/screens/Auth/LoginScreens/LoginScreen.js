@@ -49,7 +49,7 @@ function LoginScreen() {
     setIsLoggingIn(true);
     adminAuth(email, password)
       .then(res => {
-        alert('success!');
+        console.log('success');
       })
       .catch(error => {
         setIsLoggingIn(false);

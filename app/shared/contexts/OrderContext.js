@@ -11,12 +11,11 @@ export const OrderContext = createContext();
 var isLate = false;
 export const getOrderedAtDifference = order => {
   let {branch_log} = order,
-    dateNow = moment().tz('Asia/Manila'),
+    dateNow = moment(),
     duration;
 
   let ordered_at = branch_log[branch_log.length - 1].dt_created;
 
-  ordered_at = moment(ordered_at).tz('Asia/Manila');
   duration = moment.duration(dateNow.diff(ordered_at));
   var minutes = duration.asMinutes();
   minutes = Math.floor(minutes);

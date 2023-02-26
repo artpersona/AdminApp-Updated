@@ -4,7 +4,7 @@ import {RFValue} from 'react-native-responsive-fontsize';
 import {deviceHeight} from '../../../utils/device.utility';
 export default StyleSheet.create({
   placeholder_text: {
-    fontSize: RFValue(10),
+    fontSize: RFValue(12),
     fontFamily: 'Poppins-Regular',
     width: '85%',
   },

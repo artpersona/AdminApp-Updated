@@ -1,12 +1,6 @@
 import React, {useState, useContext, useEffect, useMemo} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ToastAndroid,
-  Picker,
-  Modal,
-} from 'react-native';
+import {View, Text, TouchableOpacity, ToastAndroid} from 'react-native';
+import Modal from 'react-native-modal';
 import {Colors} from '../../config';
 import Entypo from 'react-native-vector-icons/Entypo';
 
@@ -30,6 +24,8 @@ import {
   checkBranch,
   convertMinutesToHours,
 } from '../../utils/order.utility';
+
+import {Picker} from '@react-native-picker/picker';
 
 function OrderItems({order}) {
   const {moveToPreparing, moveToCancel, linkOrder, unlinkOrder} =
@@ -189,18 +185,17 @@ function OrderItems({order}) {
           <Text style={styles.deliveredValue}>
             Payment Method : {order.item.payment_method}
           </Text>
-          {/* <Text style={styles.deliveredValue}>
-            Payment Status :{" "}
+          <Text style={styles.deliveredValue}>
+            Payment Status :{' '}
             <Text
               style={
                 order.item.payment_status
-                  ? { color: Colors.success }
-                  : { color: Colors.error }
-              }
-            >
-              {order.item.payment_status ? "Paid" : "Pending"}
+                  ? {color: Colors.success}
+                  : {color: Colors.error}
+              }>
+              {order.item.payment_status ? 'Paid' : 'Pending'}
             </Text>
-          </Text> */}
+          </Text>
 
           <Text style={styles.deliveredValue}>
             Delivery Fee :{' '}
@@ -268,8 +263,7 @@ function OrderItems({order}) {
                       ]
                 }
                 disabled={timeDifference < 5}
-                // onPress={handleVisibility2}
-              >
+                onPress={handleVisibility2}>
                 <Icon2 name="chain" size={20} color={'white'} />
               </TouchableOpacity>
 
@@ -347,7 +341,7 @@ function OrderItems({order}) {
           </View>
         </TouchableOpacity>
 
-        {/* <Modal
+        <Modal
           isVisible={logsVisible}
           animationIn="slideInUp"
           animationOut="slideOutDown"
@@ -373,9 +367,9 @@ function OrderItems({order}) {
               </View>
             </ScrollView>
           </View>
-        </Modal> */}
+        </Modal>
 
-        {/* <Modal
+        <Modal
           isVisible={isVisible2}
           animationIn="slideInUp"
           animationOut="slideOutDown"
@@ -420,9 +414,9 @@ function OrderItems({order}) {
               </View>
             </View>
           </View>
-        </Modal> */}
+        </Modal>
 
-        {/* <Modal
+        <Modal
           isVisible={isVisible}
           animationIn="slideInUp"
           animationOut="slideOutDown"
@@ -474,7 +468,7 @@ function OrderItems({order}) {
               </View>
             </View>
           </View>
-        </Modal> */}
+        </Modal>
 
         {/* Alert For Acknowledging Order */}
         <AwesomeAlert

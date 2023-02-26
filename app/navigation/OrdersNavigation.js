@@ -5,11 +5,25 @@ import OrderTransactions from '../screens/OrderTransactionsScreen/OrderTransacti
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Colors} from '../config';
 import {OrderContext} from '../shared/contexts/OrderContext';
+import {Provider as PaperProvider} from 'react-native-paper';
 
 const Tab = createMaterialBottomTabNavigator();
 const OrdersNavigation = () => {
   const {newOrders} = useContext(OrderContext);
   return (
+    // <PaperProvider
+    //   theme={{
+    //     colors: {
+    //       primary: 'white',
+    //       onPrimary: 'white',
+    //       primaryContainer: 'red',
+    //       onPrimaryContainer: 'red',
+    //       secondary: 'red',
+    //       onSecondary: 'red',
+    //       secondaryContainer: 'transparent',
+    //       onSecondaryContainer: 'rgb(5, 31, 35)',
+    //     },
+    //   }}>
     <Tab.Navigator
       initialRouteName="Active Orders"
       activeColor={Colors.secondary}
@@ -21,23 +35,21 @@ const OrdersNavigation = () => {
         borderRightColor: 'white',
         borderBottomColor: 'transparent',
       }}
-      tabBarOptions={{
-        style: {
-          elevation: 0, // for Android
-          shadowOffset: {
-            width: 0,
-            height: 0, // for iOS
-          },
-          height: 500,
+      screenOptions={{
+        lazy: true,
+        tabBarLabelStyle: {
+          fontSize: 12,
+          margin: 0,
+          padding: 0,
         },
-      }}
-      lazy={true}>
+      }}>
       <Tab.Screen
         name="Active Orders"
         component={MyOrders}
         options={{
           tabBarLabel: 'Active Orders',
           tabBarBadge: newOrders.length > 0 ? `${newOrders.length}` : null,
+          tabBarColor: 'red',
           tabBarIcon: () => (
             <MaterialCommunityIcons
               name="food"
@@ -62,6 +74,7 @@ const OrdersNavigation = () => {
         }}
       />
     </Tab.Navigator>
+    // </PaperProvider>
   );
 };
 export default React.memo(OrdersNavigation);

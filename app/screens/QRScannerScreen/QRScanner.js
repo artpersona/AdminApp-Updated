@@ -1,10 +1,18 @@
 import React, {useState, useEffect, useContext} from 'react';
-import {Text, View, StyleSheet, Button} from 'react-native';
-import BarCodeScanner from 'react-native-qrcode-scanner';
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  PermissionsAndroid,
+  Linking,
+} from 'react-native';
 import CryptoJS from 'crypto-js';
 import {OrderContext} from '../../shared/contexts/OrderContext';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import ModalView from '../../components/ModalView/ModalView';
+import BarCodeScanner from 'react-native-qrcode-scanner';
+
 export default function QRScanner({route, navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
@@ -15,11 +23,36 @@ export default function QRScanner({route, navigation}) {
   const [successAlert, setSuccessAlert] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const {status} = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
+    requestCameraPermission();
   }, []);
+
+  async function requestCameraPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'App Camera Permission',
+          message:
+            'App needs access to your camera ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Camera permission granted');
+      } else if (granted === PermissionsAndroid.RESULTS.DENIED) {
+        console.log('Camera permission denied');
+      } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+        console.log('Camera permission denied with never ask again');
+        // Prompt the user to manually enable the camera permission in the app settings
+        Linking.openSettings();
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
 
   const handleBarCodeScanned = ({type, data}) => {
     setScanned(true);
@@ -39,12 +72,12 @@ export default function QRScanner({route, navigation}) {
       .catch(err => console.log('err in scanner', err));
   };
 
-  if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  // if (hasPermission === null) {
+  //   return <Text>Requesting for camera permission</Text>;
+  // }
+  // if (hasPermission === false) {
+  //   return <Text>No access to camera</Text>;
+  // }
 
   return (
     <View
@@ -54,7 +87,7 @@ export default function QRScanner({route, navigation}) {
         justifyContent: 'flex-end',
       }}>
       <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        // onRead={}={scanned ? undefined : handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
 

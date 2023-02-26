@@ -12,7 +12,7 @@ function LogItem({order}) {
     <View style={styles.container}>
       <Text style={styles.header}>
         {action}
-        {/* {branch[0].name} */}
+        {branch[0].name}
       </Text>
       <Text style={styles.subtext}>{order.dt_created}</Text>
     </View>

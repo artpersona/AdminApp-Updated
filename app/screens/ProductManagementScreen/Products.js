@@ -1,12 +1,19 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {View, KeyboardAvoidingView, FlatList} from 'react-native';
+import {
+  View,
+  KeyboardAvoidingView,
+  FlatList,
+  TextInput as Input,
+  Text,
+} from 'react-native';
 import styles from './styles';
 import CustomHeader from '../../components/CustomHeader/CustomHeader';
-// import {Input, Icon, Item} from 'native-base';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import {ProductContext} from '../../shared/contexts/ProductContext';
 import {AuthContext} from '../../shared/contexts/AuthContext';
 import {RFValue} from 'react-native-responsive-fontsize';
-import DropDownPicker from 'react-native-dropdown-picker';
+// import DropDownPicker from 'react-native-dropdown-picker';
+import {Picker} from '@react-native-picker/picker';
 
 import ProductItem from './ProducItem/ProductItem';
 function Products() {
@@ -17,6 +24,9 @@ function Products() {
   const [searchText, setSearchText] = useState('');
   const [productCategoriesList, setProductCategoriesList] =
     useState(productCategories);
+
+  const [category, setCategory] = useState('All');
+
   const storeID =
     userInfoRole == 'branch_admin' ? String(userBranch) : String(userInfoStore);
 
@@ -40,10 +50,12 @@ function Products() {
   const keyExtract = (item, index) => item.key;
 
   const handleCategorySelect = item => {
+    console.log('item is: ', item);
+    setCategory(item);
     const tempItems = [...storeProducts];
-    if (item.value != 'All') {
+    if (item != 'All') {
       setFilteredProducts(
-        tempItems.filter(data => data.product_category_name == item.value),
+        tempItems.filter(data => data.product_category_name == item),
       );
     } else {
       setFilteredProducts(tempItems);
@@ -55,18 +67,16 @@ function Products() {
       <CustomHeader></CustomHeader>
       <KeyboardAvoidingView style={styles.container}>
         <View style={styles.search__container}>
-          {/* <Item style={styles.search__section}>
-            <Input
-              placeholder="Search"
-              onChangeText={(text) => {
-                setSearchText(text);
-              }}
-              style={{ fontSize: RFValue(16) }}
-            />
-            <Icon name="ios-search" />
-          </Item> */}
+          <Input
+            placeholder="Search"
+            onChangeText={text => {
+              setSearchText(text);
+            }}
+            style={{fontSize: RFValue(14), width: '90%'}}
+          />
+          <Ionicon name="ios-search" size={RFValue(22)} />
         </View>
-        <DropDownPicker
+        {/* <DropDownPicker
           items={productCategoriesList.map((item, index) => {
             console.log('item is: ', item);
             const newArray = {
@@ -76,7 +86,6 @@ function Products() {
             return newArray;
           })}
           placeholder="Select Category"
-          containerStyle={styles.refLoc__container}
           itemStyle={styles.refLoc__dropdown_text}
           globalTextStyle={[styles.refLoc__dropdown_text, {color: 'black'}]}
           dropDownStyle={{backgroundColor: '#ffe8db'}}
@@ -84,7 +93,17 @@ function Products() {
           onChangeItem={handleCategorySelect}
           style={{backgroundColor: '#ffe8db'}}
           arrowColor={'black'}
-        />
+        /> */}
+
+        <Picker
+          selectedValue={category}
+          placeholder="Select Category"
+          containerStyle={styles.refLoc__container}
+          onValueChange={item => handleCategorySelect(item)}>
+          {productCategoriesList.map((item, index) => {
+            return <Picker.Item key={index} label={item} value={item} />;
+          })}
+        </Picker>
         <FlatList
           data={filteredProducts}
           renderItem={renderItem}
@@ -96,6 +115,13 @@ function Products() {
           keyExtractor={keyExtract}
           removeClippedSubviews={false}
           maxToRenderPerBatch={8}
+          ListEmptyComponent={
+            <View style={{marginTop: '5%'}}>
+              <Text style={{fontSize: RFValue(12), textAlign: 'center'}}>
+                No Products Found
+              </Text>
+            </View>
+          }
         />
       </KeyboardAvoidingView>
     </>

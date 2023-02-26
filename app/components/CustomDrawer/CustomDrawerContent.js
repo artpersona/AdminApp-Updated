@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {View, Image, Button, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import styles from './styles';
-import {Storage} from '../../utils';
+import Storage from '../../utils/files/Storage';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {AuthContext} from '../../shared/contexts/AuthContext';
 
