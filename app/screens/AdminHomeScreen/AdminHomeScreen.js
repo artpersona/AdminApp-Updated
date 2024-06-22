@@ -9,11 +9,16 @@ import OrderDetails from '../OrderDetailsScreen/OrderDetails';
 import RefLocation from '../RefLocationScreen/RefLocation';
 import ProductManagement from '..//ProductManagementScreen/Products';
 import ShopMenu from '../ShopMenu/ShopMenu';
+import UserManagement from '../AdminManagementScreen/UserManagementScreen/UserManagementScreen';
+
 import {AuthContext} from '../../shared/contexts/AuthContext';
 import QRScanner from '../QRScannerScreen/QRScanner';
 import {deviceWidth, isTablet} from '../../utils/device.utility';
+import AdminNavigation from '../../navigation/AdminNavigation';
+import ManageShoppersScreen from '../AdminManagementScreen/UserManagementScreen/ManageShoppersScreen';
 const Drawer = createDrawerNavigator();
 const HomeStack = createStackNavigator();
+const AdminHomeStack = createStackNavigator();
 
 const HomeStackScreen = () => {
   return (
@@ -38,6 +43,21 @@ const HomeStackScreen = () => {
   );
 };
 
+const AdminHomeStackScreen = () => {
+  console.log('AdminHomeStackScreen is called');
+  return (
+    <AdminHomeStack.Navigator
+      initialRouteName="Manage Admin"
+      screenOptions={{animationEnabled: false, headerShown: false}}>
+      <AdminHomeStack.Screen name="Manage Admin">
+        {page => {
+          return <AdminNavigation {...page} />;
+        }}
+      </AdminHomeStack.Screen>
+    </AdminHomeStack.Navigator>
+  );
+};
+
 function HomeScreen() {
   const {userInfoRole} = useContext(AuthContext);
   return (
@@ -54,14 +74,47 @@ function HomeScreen() {
         backgroundColor: '#c6cbef',
         width: isTablet ? deviceWidth * 0.6 : deviceWidth * 0.75,
       }}>
-      <Drawer.Screen
-        name="My Orders"
-        options={{
-          drawerLabel: 'Orders',
-          groupName: 'General',
-        }}>
-        {page => <HomeStackScreen {...page} />}
-      </Drawer.Screen>
+      {/* admin ui */}
+      {userInfoRole == 'admin' ? (
+        <>
+          <Drawer.Screen
+            name="Admin Tools"
+            options={{
+              drawerLabel: 'Management',
+              groupName: 'Admin Tools',
+            }}>
+            {page => <AdminHomeStackScreen {...page} />}
+          </Drawer.Screen>
+          {/* <Drawer.Screen
+            name="Branch Admins"
+            options={{
+              drawerLabel: 'Branch Admins',
+              groupName: 'User Management',
+            }}>
+            {page => <ManageShoppersScreen {...page} />}
+          </Drawer.Screen>
+          <Drawer.Screen
+            name="Resellers"
+            options={{
+              drawerLabel: 'Resellers',
+              groupName: 'User Management',
+            }}>
+            {page => <ManageShoppersScreen {...page} />}
+          </Drawer.Screen> */}
+        </>
+      ) : (
+        <>
+          {/* default ui */}
+          <Drawer.Screen
+            name="My Orders"
+            options={{
+              drawerLabel: 'Orders',
+              groupName: 'General',
+            }}>
+            {page => <HomeStackScreen {...page} />}
+          </Drawer.Screen>
+        </>
+      )}
 
       {userInfoRole == 'branch_admin' && (
         <Drawer.Screen
